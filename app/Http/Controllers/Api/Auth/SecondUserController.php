@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Api\Auth;
 use App\Http\Requests\Api\LoginValidation;
 use App\Http\Requests\Api\RegisterValidation;
 use App\Http\Resources\Api\SecondUserResource;
+use App\Mail\SecondUserWelcomeMail;
 use App\Models\SecondUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class SecondUserController
@@ -17,10 +19,14 @@ class SecondUserController
     {
         $validatedData = $registerValidation->validated();
         $password = Str::random(10);
-        info($password);
         $validatedData['password'] = bcrypt($password);
 
         $secondUser = SecondUser::create($validatedData);
+
+        Mail::to([[
+            'name' => $secondUser->name,
+            'email' => $secondUser->email,
+        ]])->send(new SecondUserWelcomeMail($secondUser, $password));
 
         return [
             'status' => true,
