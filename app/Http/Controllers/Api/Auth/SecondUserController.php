@@ -41,6 +41,13 @@ class SecondUserController
             ];
         }
 
+        if (! $secondUser->status) {
+            return [
+                'status' => false,
+                'message' => 'User is inactive.',
+            ];
+        }
+
         if (Hash::check($validatedData['password'], $secondUser->password)) {
             $newAccessToken = $secondUser->createToken('mobile-application');
 
