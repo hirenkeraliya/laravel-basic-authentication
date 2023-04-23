@@ -22,6 +22,7 @@ class SecondUser extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'mobile_number',
         'password',
     ];
 
