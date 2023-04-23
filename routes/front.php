@@ -61,5 +61,5 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::view('/dashboard', 'second_users.index')->name('dashboard');
+    Route::view('/dashboard', 'users.index')->name('dashboard');
 });

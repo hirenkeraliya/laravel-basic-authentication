@@ -4,16 +4,15 @@ namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Requests\Api\LoginValidation;
 use App\Http\Requests\Api\RegisterValidation;
-use App\Http\Resources\Api\SecondUserResource;
-use App\Mail\SecondUserWelcomeMail;
-use App\Models\SecondUser;
+use App\Http\Resources\Api\UserResource;
+use App\Mail\UserWelcomeMail;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
-class SecondUserController
+class UserController
 {
     public function register(RegisterValidation $registerValidation)
     {
@@ -21,16 +20,16 @@ class SecondUserController
         $password = Str::random(10);
         $validatedData['password'] = bcrypt($password);
 
-        $secondUser = SecondUser::create($validatedData);
+        $User = User::create($validatedData);
 
         Mail::to([[
-            'name' => $secondUser->name,
-            'email' => $secondUser->email,
-        ]])->send(new SecondUserWelcomeMail($secondUser, $password));
+            'name' => $User->name,
+            'email' => $User->email,
+        ]])->send(new UserWelcomeMail($User, $password));
 
         return [
             'status' => true,
-            'user_details' => new SecondUserResource($secondUser)
+            'user_details' => new UserResource($User)
         ];
     }
 
@@ -38,27 +37,27 @@ class SecondUserController
     {
         $validatedData = $registerValidation->validated();
 
-        $secondUser = SecondUser::where('email', $validatedData['email'])->first();
+        $User = User::where('email', $validatedData['email'])->first();
 
-        if (! $secondUser) {
+        if (! $User) {
             return [
                 'status' => false,
                 'message' => 'User Not found in our records.',
             ];
         }
 
-        if (! $secondUser->status) {
+        if (! $User->status) {
             return [
                 'status' => false,
                 'message' => 'User is inactive.',
             ];
         }
 
-        if (Hash::check($validatedData['password'], $secondUser->password)) {
-            $newAccessToken = $secondUser->createToken('mobile-application');
+        if (Hash::check($validatedData['password'], $User->password)) {
+            $newAccessToken = $User->createToken('mobile-application');
 
             return [
-                'user_details' => new SecondUserResource($secondUser),
+                'user_details' => new UserResource($User),
                 'token' => $newAccessToken->plainTextToken
             ];
         }
@@ -71,17 +70,17 @@ class SecondUserController
 
     public function getUserDetails(Request $request)
     {
-        $secondUser = $request->user();
+        $User = $request->user();
 
         return [
-            'user_details' => new SecondUserResource($secondUser),
+            'user_details' => new UserResource($User),
         ];
     }
 
     public function logout(Request $request)
     {
-        $secondUser = $request->user();
+        $User = $request->user();
 
-        $secondUser->tokens()->delete();
+        $User->tokens()->delete();
     }
 }

@@ -1,13 +1,13 @@
 <x-mail::message>
 # Welcome
 
-Hi, {{ $secondUser->name }}
+Hi, {{ $user->name }}
 
 Welcome to {{ config('app.name') }}
 
 | Username | Password |
 | ------------ |:--------:|
-| {{ $secondUser->email }} | {{ $password }} |
+| {{ $user->email }} | {{ $password }} |
 
 
 Thanks,<br>

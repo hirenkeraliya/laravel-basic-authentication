@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use App\Models\SecondUser;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -10,19 +10,19 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class SecondUserWelcomeMail extends Mailable
+class UserWelcomeMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $secondUser;
+    public $user;
     public $password;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(SecondUser $secondUser, string $password)
+    public function __construct(User $user, string $password)
     {
-        $this->secondUser = $secondUser;
+        $this->user = $user;
         $this->password = $password;
     }
 
@@ -42,7 +42,7 @@ class SecondUserWelcomeMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'mail.second-user-welcome-mail',
+            markdown: 'mail.user-welcome-mail',
         );
     }
 }

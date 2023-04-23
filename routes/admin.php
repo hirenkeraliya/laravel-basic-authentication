@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\Auth\NewPasswordController;
 use App\Http\Controllers\Admin\Auth\PasswordController;
 use App\Http\Controllers\Admin\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
+use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin/')->name('admin.')->group(function () {
@@ -45,6 +46,6 @@ Route::prefix('admin/')->name('admin.')->group(function () {
         Route::patch('/profile', [AdminProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [AdminProfileController::class, 'destroy'])->name('profile.destroy');
 
-        Route::view('/dashboard', 'admins.dashboard')->name('dashboard');
+        Route::get('/dashboard', [UserController::class, 'index'])->name('dashboard');
     });
 });

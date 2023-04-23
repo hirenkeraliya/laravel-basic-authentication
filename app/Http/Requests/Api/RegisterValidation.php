@@ -23,8 +23,8 @@ class RegisterValidation extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'unique:second_users,email'],
-            'mobile_number' => ['required', 'string', 'max:10', 'min:10', 'unique:second_users,mobile_number'],
+            'email' => ['required', 'string', 'email', 'unique:users,email'],
+            'mobile_number' => ['required', 'string', 'max:10', 'min:10', 'unique:users,mobile_number'],
         ];
     }
 }
