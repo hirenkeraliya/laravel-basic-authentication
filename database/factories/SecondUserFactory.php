@@ -22,6 +22,7 @@ class SecondUserFactory extends Factory
             'email' => $this->faker->unique()->safeEmail(),
             'mobile_number' => $this->faker->unique()->phoneNumber(),
             'password' => bcrypt(12345678),
+            'status' => rand(0, 1),
         ];
     }
 }

@@ -24,6 +24,7 @@ class SecondUser extends Authenticatable
         'email',
         'mobile_number',
         'password',
+        'status',
     ];
 
     /**
