@@ -17,7 +17,7 @@ class SecondUserController extends Controller
      */
     public function index(): View
     {
-        $secondUsers = SecondUser::get();
+        $secondUsers = SecondUser::paginate(10);
 
         return view('second_users.index', compact('secondUsers'));
     }

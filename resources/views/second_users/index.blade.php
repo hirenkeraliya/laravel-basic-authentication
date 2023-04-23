@@ -49,6 +49,10 @@
                             @endforeach
                         </tbody>
                     </table>
+
+                    <div class="mt-5">
+                        {{ $secondUsers->links() }}
+                    </div>
                 </div>
             </div>
         </div>
