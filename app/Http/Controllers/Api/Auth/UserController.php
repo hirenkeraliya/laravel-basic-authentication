@@ -20,16 +20,16 @@ class UserController
         $password = Str::random(10);
         $validatedData['password'] = bcrypt($password);
 
-        $User = User::create($validatedData);
+        $user = User::create($validatedData);
 
         Mail::to([[
-            'name' => $User->name,
-            'email' => $User->email,
-        ]])->send(new UserWelcomeMail($User, $password));
+            'name' => $user->name,
+            'email' => $user->email,
+        ]])->send(new UserWelcomeMail($user, $password));
 
         return [
             'status' => true,
-            'user_details' => new UserResource($User)
+            'user_details' => new UserResource($user)
         ];
     }
 
@@ -37,27 +37,27 @@ class UserController
     {
         $validatedData = $registerValidation->validated();
 
-        $User = User::where('email', $validatedData['email'])->first();
+        $user = User::where('email', $validatedData['email'])->first();
 
-        if (! $User) {
+        if (! $user) {
             return [
                 'status' => false,
                 'message' => 'User Not found in our records.',
             ];
         }
 
-        if (! $User->status) {
+        if (! $user->status) {
             return [
                 'status' => false,
                 'message' => 'User is inactive.',
             ];
         }
 
-        if (Hash::check($validatedData['password'], $User->password)) {
-            $newAccessToken = $User->createToken('mobile-application');
+        if (Hash::check($validatedData['password'], $user->password)) {
+            $newAccessToken = $user->createToken('mobile-application');
 
             return [
-                'user_details' => new UserResource($User),
+                'user_details' => new UserResource($user),
                 'token' => $newAccessToken->plainTextToken
             ];
         }
@@ -70,17 +70,17 @@ class UserController
 
     public function getUserDetails(Request $request)
     {
-        $User = $request->user();
+        $user = $request->user();
 
         return [
-            'user_details' => new UserResource($User),
+            'user_details' => new UserResource($user),
         ];
     }
 
     public function logout(Request $request)
     {
-        $User = $request->user();
+        $user = $request->user();
 
-        $User->tokens()->delete();
+        $user->tokens()->delete();
     }
 }
