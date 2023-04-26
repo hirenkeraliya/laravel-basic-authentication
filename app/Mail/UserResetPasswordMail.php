@@ -10,21 +10,17 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class UserWelcomeMail extends Mailable
+class UserResetPasswordMail extends Mailable
 {
     use Queueable;
     use SerializesModels;
 
-    public $user;
-    public $password;
-
     /**
      * Create a new message instance.
      */
-    public function __construct(User $user, string $password)
+    public function __construct(public User $user, public string $token)
     {
-        $this->user = $user;
-        $this->password = $password;
+        //
     }
 
     /**
@@ -33,7 +29,7 @@ class UserWelcomeMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Welcome Mail',
+            subject: 'User Reset Password Mail',
         );
     }
 
@@ -43,7 +39,7 @@ class UserWelcomeMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'mail.user-welcome-mail',
+            view: 'mail.user-reset-password-mail',
         );
     }
 }
